@@ -1,6 +1,7 @@
-import 'package:blabla/services/location_service.dart';
+import 'package:blabla/data/repositories/location/location_repository.dart';
 import 'package:blabla/ui/widgets/display/bla_divider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../model/ride/locations.dart';
 import '../../theme/theme.dart';
@@ -19,6 +20,7 @@ class BlaLocationPicker extends StatefulWidget {
 
 class _BlaLocationPickerState extends State<BlaLocationPicker> {
   String currentSearchText = "";
+  List<Location> _locations = [];
 
   void onTap(Location location) {
     Navigator.pop<Location>(context, location);
@@ -31,6 +33,7 @@ class _BlaLocationPickerState extends State<BlaLocationPicker> {
   @override
   void initState() {
     super.initState();
+    _loadLocations();
 
     // Initilize the search bar if any initial location
     if (widget.initLocation != null) {
@@ -38,6 +41,14 @@ class _BlaLocationPickerState extends State<BlaLocationPicker> {
         currentSearchText = widget.initLocation!.name;
       });
     }
+  }
+
+  Future<void> _loadLocations() async {
+    final repository = context.read<LocationRepository>();
+    final locations = await repository.getLocations();
+    setState(() {
+      _locations = locations;
+    });
   }
 
   void onSearchChanged(String search) {
@@ -50,7 +61,7 @@ class _BlaLocationPickerState extends State<BlaLocationPicker> {
     if (currentSearchText.length < 2) {
       return [];
     }
-    return LocationsService.availableLocations
+    return _locations
         .where(
           (location) => location.name.toUpperCase().contains(
             currentSearchText.toUpperCase(),

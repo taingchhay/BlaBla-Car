@@ -10,7 +10,7 @@ import 'data/repositories/ride_preference/ride_preference_repository_mock.dart';
 
 List<InheritedProvider> get devProviders {
   return [
- 
+
     // 1 - Inject the location repository
     Provider<LocationRepository>(create: (_) => LocationRepositoryMock()),
 

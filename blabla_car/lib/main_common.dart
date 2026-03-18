@@ -9,7 +9,11 @@ void mainCommon(List<InheritedProvider> providers) {
    runApp(
     MultiProvider(
       providers: providers,
-      child: const BlaBlaApp()
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: BlaBlaApp(),
+      ),
+      // child: const BlaBlaApp()
     )
   ); 
 }
